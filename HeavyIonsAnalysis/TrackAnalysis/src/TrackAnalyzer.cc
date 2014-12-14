@@ -391,6 +391,8 @@ TrackAnalyzer::TrackAnalyzer(const edm::ParameterSet& iConfig)
   pfCandSrc_ = iConfig.getParameter<edm::InputTag>("pfCandSrc");
   associatorMap_=iConfig.getParameter<edm::InputTag>("associatorMap");
 
+  if(useCentrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -425,7 +427,6 @@ TrackAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   fillVertices(iEvent);
 
   if(useCentrality_){
-    if(!centrality_) centrality_ = new CentralityProvider(iSetup);
     centrality_->newEvent(iEvent,iSetup); // make sure you do this first in every event
     pev_.cbin = centrality_->getBin();
   }

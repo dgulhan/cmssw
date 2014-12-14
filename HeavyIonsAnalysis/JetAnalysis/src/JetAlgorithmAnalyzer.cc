@@ -280,6 +280,9 @@ JetAlgorithmAnalyzer::JetAlgorithmAnalyzer(const edm::ParameterSet& iConfig)
 
   }
 
+  if(!centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());
+
+
 }
 
 
@@ -421,7 +424,6 @@ void JetAlgorithmAnalyzer::fillBkgNtuple(const PileUpSubtractor* subtractor, int
 void JetAlgorithmAnalyzer::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
 {
 
-  if(!centrality_) centrality_ = new CentralityProvider(iSetup);
   centrality_->newEvent(iEvent,iSetup);
 
   phi0_ = 0;

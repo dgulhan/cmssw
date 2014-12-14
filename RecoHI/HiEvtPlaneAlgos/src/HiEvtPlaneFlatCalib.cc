@@ -169,7 +169,8 @@ HiEvtPlaneFlatCalib::HiEvtPlaneFlatCalib(const edm::ParameterSet& iConfig)
     }  
 
   }
-  
+
+  if(!centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());  
 }
 
 
@@ -195,7 +196,6 @@ HiEvtPlaneFlatCalib::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   //
   //Get Centrality
   //
-  if(!centrality_) centrality_ = new CentralityProvider(iSetup);
 
    centrality_->newEvent(iEvent,iSetup); // make sure you do this first in every event
    int bin = centrality_->getBin();

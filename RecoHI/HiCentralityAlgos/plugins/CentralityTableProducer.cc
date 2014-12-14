@@ -40,7 +40,7 @@ using namespace std;
 class CentralityTableProducer : public edm::EDAnalyzer {
    public:
       explicit CentralityTableProducer(const edm::ParameterSet&);
-      explicit CentralityTableProducer(const edm::ParameterSet&, const edm::EventSetup&, edm::ConsumesCollector &&);
+  //      explicit CentralityTableProducer(const edm::ParameterSet&, const edm::EventSetup&, edm::ConsumesCollector &&);
       ~CentralityTableProducer();
 
    private:
@@ -82,9 +82,9 @@ class CentralityTableProducer : public edm::EDAnalyzer {
 //
 // constructors and destructor
 //
-CentralityTableProducer::CentralityTableProducer(const edm::ParameterSet& iConfig){}
+CentralityTableProducer::CentralityTableProducer(const edm::ParameterSet& iConfig) :
 
-CentralityTableProducer::CentralityTableProducer(const edm::ParameterSet& iConfig, const edm::EventSetup& iSetup, edm::ConsumesCollector && iC):
+//CentralityTableProducer::CentralityTableProducer(const edm::ParameterSet& iConfig, const edm::EventSetup& iSetup, edm::ConsumesCollector && iC):
    text_("bins.txt"),
    runnum_(0)
 {
@@ -99,7 +99,7 @@ CentralityTableProducer::CentralityTableProducer(const edm::ParameterSet& iConfi
       inputTFile_  = new TFile(inputTFileName_.data(),"read");
       cout<<inputTFileName_.data()<<endl;
    }
-   cent =  new CentralityProvider(iSetup, std::move(iC));
+   cent =  new CentralityProvider(iConfig,consumesCollector());//, std::move(iC));
 }
 
 CentralityTableProducer::~CentralityTableProducer()

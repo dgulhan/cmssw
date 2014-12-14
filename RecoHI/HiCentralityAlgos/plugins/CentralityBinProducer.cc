@@ -41,7 +41,7 @@
 class CentralityBinProducer : public edm::EDProducer {
    public:
       explicit CentralityBinProducer(const edm::ParameterSet&);
-      explicit CentralityBinProducer(const edm::ParameterSet&, const edm::EventSetup&, edm::ConsumesCollector &&);
+  //      explicit CentralityBinProducer(const edm::ParameterSet&, const edm::EventSetup&);
       ~CentralityBinProducer();
 
    private:
@@ -67,13 +67,13 @@ class CentralityBinProducer : public edm::EDProducer {
 //
 // constructors and destructor
 //
-CentralityBinProducer::CentralityBinProducer(const edm::ParameterSet& iConfig){}
+//CentralityBinProducer::CentralityBinProducer(const edm::ParameterSet& iConfig){}
 
-CentralityBinProducer::CentralityBinProducer(const edm::ParameterSet& iConfig, const edm::EventSetup& iSetup, edm::ConsumesCollector && iC) :
+CentralityBinProducer::CentralityBinProducer(const edm::ParameterSet& iConfig) ://, const edm::EventSetup& iSetup) :
   centrality_(0)
 {
    using namespace edm;
-   if(!centrality_) centrality_ = new CentralityProvider(iSetup, std::move(iC));
+   if(!centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());
 
    produces<int>();  
 }

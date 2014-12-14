@@ -130,6 +130,7 @@ GenParticleCounter::GenParticleCounter(const edm::ParameterSet& iConfig)
   mSrc = iConfig.getUntrackedParameter<std::string>("src", "hiGenParticles");
   doCentrality = iConfig.getUntrackedParameter<bool>("doCentrality", true);
   vertexProducer_  = iConfig.getUntrackedParameter<std::string>("VertexProducer","hiSelectedVertex");
+  if ( doCentrality ) centrality_ = new CentralityProvider(iConfig, consumesCollector());
 
 }
 
@@ -155,7 +156,6 @@ GenParticleCounter::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   using namespace edm;
 
   if ( doCentrality ) {
-    centrality_ = new CentralityProvider(iSetup);
     centrality_->newEvent(iEvent,iSetup);
     cBin = centrality_->getBin();
     const reco::Centrality *cent = centrality_->raw();

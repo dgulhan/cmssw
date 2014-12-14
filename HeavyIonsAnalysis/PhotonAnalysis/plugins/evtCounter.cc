@@ -115,7 +115,7 @@ private:
 evtCounter::evtCounter(const edm::ParameterSet& iConfig)
 
 {
-
+  centrality_ = new CentralityProvider(iConfig, consumesCollector());
 }
 
 
@@ -139,7 +139,6 @@ evtCounter::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   using namespace edm;
   NoE->Fill(0);
 
-  centrality_ = new CentralityProvider(iSetup);
   centrality_->newEvent(iEvent,iSetup);
   const reco::Centrality *cent = centrality_->raw();
   hf = cent->EtHFhitSum();

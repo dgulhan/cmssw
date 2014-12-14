@@ -120,6 +120,7 @@ HiJPTJetAnalyzer::HiJPTJetAnalyzer(const edm::ParameterSet& iConfig) :
      doSubEvent_ = iConfig.getUntrackedParameter<bool>("doSubEvent",1);
   }
 
+  if(useCentrality_ && !centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());      
    
 }
 
@@ -406,7 +407,6 @@ HiJPTJetAnalyzer::analyze(const Event& iEvent,
     geo = pGeo.product();
   }
   if(useCentrality_){
-      if(!centrality_) centrality_ = new CentralityProvider(iSetup);      
       centrality_->newEvent(iEvent,iSetup); // make sure you do this first in every event
       //double c = centrality_->centralityValue();
       const reco::Centrality *cent = centrality_->raw();

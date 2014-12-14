@@ -44,6 +44,8 @@ HLTMuTree::HLTMuTree(const edm::ParameterSet& iConfig)
   //higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
   //lowerPuritySelection_(iConfig.getParameter<std::string>("lowerPuritySelection")),
 
+  centrality = new CentralityProvider(iConfig, consumesCollector());
+
 }
 
 
@@ -234,7 +236,6 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   //Loop over reco::muon
   if (doReco) {
     //Put centrality information
-    centrality = new CentralityProvider(iSetup);
     centrality->newEvent(iEvent,iSetup);
     cbin = centrality->getBin();
 //    cbin = -1;

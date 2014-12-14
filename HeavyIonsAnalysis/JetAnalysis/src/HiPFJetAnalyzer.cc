@@ -112,6 +112,8 @@ HiPFJetAnalyzer::HiPFJetAnalyzer(const edm::ParameterSet& iConfig) {
     }
   }
 
+  if(useCentrality_ && !centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());
+
 
   cout<<" tracks : "<<trackTag_<<endl;
   cout<<" jet collection 1: "<<jetTag1_<<endl;
@@ -443,7 +445,6 @@ HiPFJetAnalyzer::analyze(const Event& iEvent,
   if(useCentrality_){
     //if(!isMC_){
 
-    if(!centrality_) centrality_ = new CentralityProvider(iSetup);
     centrality_->newEvent(iEvent,iSetup); // make sure you do this first in every event
     //double c = centrality_->centralityValue();
     const reco::Centrality *cent = centrality_->raw();

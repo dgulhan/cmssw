@@ -190,6 +190,8 @@ process.hiSelectGenJets = cms.Sequence(
     ak7HiGenJetsCleaned
 )
 
+process.hiEvtAnalyzer.HeavyIonGlobalParameters = process.HeavyIonGlobalParameters
+
 process.ana_step = cms.Path(process.heavyIon*
                             process.hltanalysis *
 #temp                            process.hltobject *

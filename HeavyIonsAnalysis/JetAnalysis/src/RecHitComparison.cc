@@ -167,6 +167,7 @@ RecHitComparison::RecHitComparison(const edm::ParameterSet& iConfig) :
   BCSrc1_ = iConfig.getUntrackedParameter<edm::InputTag>("BasicClusterSrc1",edm::InputTag("ecalRecHit","EcalRecHitsEB","RECO"));
   BCSrc2_ = iConfig.getUntrackedParameter<edm::InputTag>("BasicClusterSrc2",edm::InputTag("ecalRecHit","EcalRecHitsEB","SIGNALONLY"));
 
+  if(!centrality_) centrality_ = new CentralityProvider(iConfig, consumesCollector());
 }
 
 
@@ -187,7 +188,6 @@ RecHitComparison::~RecHitComparison()
 void
 RecHitComparison::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
 {
-  if(!centrality_) centrality_ = new CentralityProvider(iSetup);
   if(!geo){
     edm::ESHandle<CaloGeometry> pGeo;
     iSetup.get<CaloGeometryRecord>().get(pGeo);
