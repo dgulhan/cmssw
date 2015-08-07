@@ -10,10 +10,7 @@ hiInitialStepTrackRefsForJets = trackRefsForJets.clone(src = cms.InputTag('hiGlo
 #change this to import Bkg substracted Heavy Ion jets:
 from RecoHI.HiJetAlgos.hiCaloJetsForTrk_cff import *
 
-hiAkPu4CaloJetsForTrk = akPu4CaloJetsForTrk.clone( srcPVs = cms.InputTag('hiSelectedVertex'), src= cms.InputTag('hiCaloTowerForTrk') )
-hiCaloTowerForTrk = hiCaloTowerForTrk.clone( hbheInput=cms.InputTag('hbhereco') )
-hiCaloJetsForTrk = cms.Sequence(hiCaloTowerForTrk*hiAkPu4CaloJetsForTrk)
-hiJetsForCoreTracking = cms.EDFilter("CandPtrSelector", src = cms.InputTag("hiAkPu4CaloJetsForTrk"), cut = cms.string("pt > 30 && abs(eta) < 2.5"))
+hiJetsForCoreTracking = cms.EDFilter("CandPtrSelector", src = cms.InputTag("akPu4CaloJetsForTrk"), cut = cms.string("pt > 30 && abs(eta) < 2.5"))
 
 # care only at tracks from main PV
 hiFirstStepGoodPrimaryVertices = cms.EDFilter("PrimaryVertexObjectFilter",
@@ -141,7 +138,7 @@ hiJetCoreRegionalStepTrackCandidates = RecoTracker.CkfPattern.CkfTrackCandidates
 # TRACK FITTING
 import RecoTracker.TrackProducer.TrackProducer_cfi
 hiJetCoreRegionalStepTracks = RecoTracker.TrackProducer.TrackProducer_cfi.TrackProducer.clone(
-    AlgorithmName = cms.string('hiJetCoreRegionalStep'),
+    AlgorithmName = cms.string('jetCoreRegionalStep'),
     src = 'hiJetCoreRegionalStepTrackCandidates',
     Fitter = cms.string('FlexibleKFFittingSmoother')
     )
