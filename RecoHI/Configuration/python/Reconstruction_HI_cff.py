@@ -30,7 +30,7 @@ from RecoMET.METProducers.hcalnoiseinfoproducer_cfi import *
 hcalnoise.trackCollName = 'hiGeneralTracks'
 
 # Global + High-Level Reco Sequence
-globalRecoPbPb = cms.Sequence(hiTracking
+globalRecoPbPb = cms.Sequence(hiTracking_wSplitting
                               * hiParticleFlowLocalReco
                               * hiEcalClusters
                               * hiRecoJets
