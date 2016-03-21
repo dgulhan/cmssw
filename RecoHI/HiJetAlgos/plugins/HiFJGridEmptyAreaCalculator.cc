@@ -83,9 +83,9 @@ HiFJGridEmptyAreaCalculator::produce(edm::Event& iEvent, const edm::EventSetup& 
    double rho = mapRho->at(ieta);
    double rhoM = mapRhoM->at(ieta);
 
-   calculate_total_jet_area(iEvent, iSetup);
+   calculate_area_fraction_of_jets(iEvent, iSetup);
 
-   double correction_kt = area_fraction();
+   double correction_kt = _total_inbound_area;
    mapToRhoCorrOut->at(ieta) = correction_kt*rho;
    mapToRhoMCorrOut->at(ieta) = correction_kt*rhoM;
    corrWKtAreaOut->at(ieta) = correction_kt;
@@ -177,12 +177,10 @@ HiFJGridEmptyAreaCalculator::calculate_grid_rho(const edm::Event& iEvent, const 
 	 //normalize to area
      _rho_vs_eta[jeta] /= _tile_area;
   }
-  
-  // median_of_eta_band(scalar_pt);  
 }
 
 void
-HiFJGridEmptyAreaCalculator::calculate_total_jet_area(const edm::Event& iEvent, const edm::EventSetup& iSetup){
+HiFJGridEmptyAreaCalculator::calculate_area_fraction_of_jets(const edm::Event& iEvent, const edm::EventSetup& iSetup){
   edm::Handle<edm::View<reco::Jet> > jets;
   iEvent.getByToken(jetsToken_, jets);
   
@@ -210,11 +208,14 @@ HiFJGridEmptyAreaCalculator::calculate_total_jet_area(const edm::Event& iEvent, 
 	n_constit_jet_inbound++;
    }   
    
+   //if the jet is well within the eta range just add the area
    if(n_constit_jet == n_constit_jet_inbound){
 	_total_inbound_area += area_kt;
     continue;
    }
    
+   //for jets that fall outside of eta range calculate fraction of area
+   //inside the range with a grid
    int nthis = 0;
    if (n_constit_jet > 0) nthis = num_jet_grid_cells(pf_indices_jet);
 
@@ -225,6 +226,13 @@ HiFJGridEmptyAreaCalculator::calculate_total_jet_area(const edm::Event& iEvent, 
    double fraction_area = ((double)nthis_inbound)/((double)nthis);
    _total_inbound_area += area_kt*fraction_area;    
   } 
+  
+  //divide by the total area in that range
+  _total_inbound_area /= ((_eta_max_jet - _eta_min_jet)*twopi);
+  
+  //the fraction can still be greater than 1 because kt area fraction inside 
+  //the range can differ from what we calculated with the grid
+  if (_total_inbound_area > 1) _total_inbound_area = 1;
 }
 
 
@@ -391,32 +399,6 @@ HiFJGridEmptyAreaCalculator::num_jet_grid_cells( std::vector<std::pair<int, int>
   ngrid += highest_jeta - lowest_jeta + 1;
   return ngrid;
 }
-
-/*void
-HiFJGridEmptyAreaCalculator::median_of_eta_band(std::vector<std::vector<double>>&  pt_vec){
-  _rho_vs_eta.resize(_ny);
-  for(int jeta = 0; jeta < _ny; jeta++){
-    sort(pt_vec[jeta].begin(), pt_vec[jeta].end());
-	int size = pt_vec[jeta].size();
-	// if (size  % 2 == 0)
-    // {
-      // _rho_vs_eta[jeta] = (pt_vec[jeta][size / 2 - 1] + pt_vec[jeta][size / 2]) / 2;
-    // }
-    // else 
-    // {
-      // _rho_vs_eta[jeta] = pt_vec[jeta][size / 2];
-    // }
-	_rho_vs_eta[jeta] = 0;
-	for(int jphi = 0; jphi < size; jphi++){
-	 if(_rho_vs_eta[jeta] == 0) continue;
-	 std::cout << _rho_vs_eta[jeta] << std::endl;
-	 _rho_vs_eta[jeta] += pt_vec[jeta][jphi];
-	}
-	_rho_vs_eta[jeta] /= ((double)_nphi);
-    _rho_vs_eta[jeta] /= _tile_area;
-  }
-}
-*/
 
 // ------------ method called once each job just before starting event loop  ------------
 void 

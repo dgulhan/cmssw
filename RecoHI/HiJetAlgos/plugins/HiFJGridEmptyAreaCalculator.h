@@ -58,12 +58,9 @@ private:
   
   /// calculates the area of jets that fall within the eta 
   /// range by scaling kt areas using grid areas
-  void calculate_total_jet_area(const edm::Event& iEvent, const edm::EventSetup& iSetup);
+  void calculate_area_fraction_of_jets(const edm::Event& iEvent, const edm::EventSetup& iSetup);
   void calculate_grid_rho(const edm::Event& iEvent, const edm::EventSetup& iSetup);
   
-  ///in a strip of eta band it calculates the median of rho over the different phi bins
-  // void median_of_eta_band(std::vector<std::vector<double>>&  pt_vec);
-
   /// information about the grid
   const double twopi = 2*TMath::Pi(); 
   
@@ -77,7 +74,6 @@ private:
   std::vector<double> _eta_min_grid;
   
   int n_tiles()  {return _ntotal;}
-  double area_fraction()  {return TMath::Min(1., _total_inbound_area/((_ymax - _ymin)*twopi));}
   
   /// input tokens
   edm::EDGetTokenT<edm::View<reco::Jet>>                 jetsToken_;
