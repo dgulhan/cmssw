@@ -13,7 +13,7 @@ namespace reco {
   // reduce to [-pi,pi]
   template<typename T> inline
   T  reduceRange(T x) {
-   constexpr T o2pi = 1./(2.*M_PI);
+   const T o2pi = 1./(2.*M_PI);
    if (std::abs(x) <= T(M_PI)) return x;
    T n = std::round(x*o2pi);
    return x - n*T(2.*M_PI);
