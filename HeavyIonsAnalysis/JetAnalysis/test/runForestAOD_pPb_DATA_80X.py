@@ -53,7 +53,7 @@ process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
 
 # Customization
-from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_pPb8TeV
+from HeavyIonsAnalysis.Configuration.CommonFunctionsLocalDB_cff import overrideJEC_pPb8TeV
 process = overrideJEC_pPb8TeV(process)
 
 process.GlobalTag.toGet.extend([

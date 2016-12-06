@@ -27,7 +27,7 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
                             duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
                             fileNames = cms.untracked.vstring(
-				'file:/afs/cern.ch/user/k/kjung/run2Validation/HLTchecks/CMSSW_8_0_22/src/pPb_5TeVEpos_RECO.root'
+				'file:step3_RAW2DIGI_L1Reco_RECO.root'
 				)
 )
 
@@ -54,7 +54,7 @@ process.HiForest.GlobalTagLabel = process.GlobalTag.globaltag
 
 
 # Customization
-from HeavyIonsAnalysis.Configuration.CommonFunctions_cff import overrideJEC_pPb8TeV
+from HeavyIonsAnalysis.Configuration.CommonFunctionsLocalDB_cff import overrideJEC_pPb8TeV
 process = overrideJEC_pPb8TeV(process)
 
 process.GlobalTag.toGet.extend([
@@ -75,7 +75,7 @@ process.GlobalTag.toGet.extend([
 #####################################################################################
 
 process.TFileService = cms.Service("TFileService",
-                                   fileName=cms.string("HiForestAOD.root"))
+                                   fileName=cms.string("HiForestAOD_old.root"))
 
 #####################################################################################
 # Additional Reconstruction and Analysis: Main Body
